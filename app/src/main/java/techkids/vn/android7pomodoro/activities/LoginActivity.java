@@ -14,7 +14,17 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import techkids.vn.android7pomodoro.R;
+import techkids.vn.android7pomodoro.networks.jsonmodels.LoginBodyJson;
+import techkids.vn.android7pomodoro.networks.jsonmodels.LoginResponseJson;
+import techkids.vn.android7pomodoro.networks.services.LoginService;
 import techkids.vn.android7pomodoro.settings.LoginCredentials;
 import techkids.vn.android7pomodoro.settings.SharedPrefs;
 
@@ -27,11 +37,13 @@ public class LoginActivity extends AppCompatActivity {
     private Button btRegister;
     private Button btLogin;
 
+    Retrofit retrofit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        skipLoginIfPossible();
+        //skipLoginIfPossible();
 
         setContentView(R.layout.activity_login);
 
@@ -46,24 +58,68 @@ public class LoginActivity extends AppCompatActivity {
                 attemptLogin();
             }
         });
+
+    }
+
+    private void sendLogin(String username, String password) {
+        retrofit = new Retrofit.Builder()
+                .baseUrl("http://a-task.herokuapp.com/api/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        LoginService loginService = retrofit.create(LoginService.class);
+
+        // data & format
+        // format => MediaType
+        // data => json
+        MediaType jsonMediaType = MediaType.parse("application/json");
+        String loginJson = (new Gson()).toJson(new LoginBodyJson(username, password));
+
+        RequestBody loginBody = RequestBody.create(jsonMediaType, loginJson);
+
+        loginService
+                .login(loginBody)
+                .enqueue(new Callback<LoginResponseJson>() {
+                    @Override
+                    public void onResponse(Call<LoginResponseJson> call, Response<LoginResponseJson> response) {
+                        LoginResponseJson loginResponseJson = response.body();
+                        if (loginResponseJson == null) {
+                            Log.d(TAG, "onResponse: Could not parse body");
+                        } else {
+                            Log.d(TAG, String.format("onResponse, oh yeah: %s", loginResponseJson));
+                            if (response.code() == 200) {
+                                onLoginSuccess();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<LoginResponseJson> call, Throwable t) {
+                        Log.d(TAG, String.format("onFailure: %s", t));
+                    }
+                });
     }
 
     private void skipLoginIfPossible() {
-        if(SharedPrefs.getInstance().getLoginCredendials() != null) {
+        if (SharedPrefs.getInstance().getLoginCredendials() != null) {
             gotoTaskActivity();
         }
     }
 
-    private void attemptLogin() {
-        String username = etUsername.getText().toString();
-        String password = etPassword.getText().toString();
+    private void onLoginSuccess() {
+        SharedPrefs.getInstance().put(new LoginCredentials(username, password));
+        Toast.makeText(this, "Logged in", Toast.LENGTH_SHORT).show();
+        gotoTaskActivity();
+    }
 
-        if (username.equals("admin") && password.equals("admin")) {
-            // Notifications
-            SharedPrefs.getInstance().put(new LoginCredentials(username, password));
-            Toast.makeText(this, "Logged in", Toast.LENGTH_SHORT).show();
-            gotoTaskActivity();
-        }
+    private String username;
+    private String password;
+
+    private void attemptLogin() {
+        username = etUsername.getText().toString();
+        password = etPassword.getText().toString();
+
+        sendLogin(username, password);
     }
 
     private void gotoTaskActivity() {
