@@ -7,33 +7,10 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class LoginResponseJson {
-    @SerializedName("code")
-    private int code;
+    @SerializedName("access_token")
+    private String accessToken;
 
-    @SerializedName("message")
-    private String message;
-
-    @SerializedName("token")
-    private String token;
-
-    public int getCode() {
-        return code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    @Override
-    public String toString() {
-        return "LoginResponseJson{" +
-                "code=" + code +
-                ", message='" + message + '\'' +
-                ", token='" + token + '\'' +
-                '}';
+    public String getAccessToken() {
+        return accessToken;
     }
 }

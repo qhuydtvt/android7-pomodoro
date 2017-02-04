@@ -48,8 +48,34 @@ public class SharedPrefs {
         String loginJSON = this.sharedPreferences.getString(LOGIN_KEY, null);
 
         // 2. Convert string to object
-        if(loginJSON == null) return null;
+        if (loginJSON == null) return null;
         LoginCredentials loginCredentials = gson.fromJson(loginJSON, LoginCredentials.class);
         return loginCredentials;
     }
+
+    public String getAccessToken() {
+        LoginCredentials loginCred = getLoginCredendials();
+        if (loginCred != null) {
+            return loginCred.getAccessToken();
+        }
+        return null;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
