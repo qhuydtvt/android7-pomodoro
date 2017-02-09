@@ -3,6 +3,8 @@ package techkids.vn.android7pomodoro.activities;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,15 +15,24 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import techkids.vn.android7pomodoro.R;
+import techkids.vn.android7pomodoro.adapters.TaskAdapter;
 
 public class TaskActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    @BindView(R.id.rv_task)
+    RecyclerView rvTask;
+
+    private TaskAdapter taskAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task);
+        // TODO: Move UI setup to proper method
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -42,6 +53,16 @@ public class TaskActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        setupUI();
+    }
+
+    private void setupUI() {
+        ButterKnife.bind(this);
+
+        taskAdapter = new TaskAdapter();
+        rvTask.setAdapter(taskAdapter);
+        rvTask.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
