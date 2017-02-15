@@ -29,4 +29,12 @@ public class TaskColorViewHolder extends RecyclerView.ViewHolder {
     public void bind(String color) {
         Utils.setSolidColor(vTaskColor, color);
     }
+
+    public void setCheck(boolean check) {
+        if(check) {
+            ivCheck.setVisibility(View.VISIBLE);
+        } else {
+            ivCheck.setVisibility(View.INVISIBLE);
+        }
+    }
 }

@@ -18,7 +18,7 @@
             android:layout_marginBottom="@dimen/inter_space">
 
             <EditText
-                android:id="@+id/et_name"
+                android:id="@+id/et_task_name"
                 android:hint="@string/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -35,7 +35,7 @@
             >
 
             <EditText
-                android:id="@+id/et_payment"
+                android:id="@+id/et_payment_per_hour"
                 android:hint="@string/payment_per_hour"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

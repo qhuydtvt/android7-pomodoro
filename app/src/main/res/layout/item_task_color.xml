@@ -12,6 +12,7 @@
         />
     <ImageView
         android:id="@+id/iv_check"
+        android:visibility="invisible"
         android:layout_centerInParent="true"
         app:srcCompat="@drawable/ic_check_white_24px"
         android:layout_width="@dimen/task_color_size"
