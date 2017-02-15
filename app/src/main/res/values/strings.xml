@@ -14,4 +14,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="ok">OK</string>
+    <string name="name">Name</string>
+    <string name="payment_per_hour">Payment per hour</string>
+    <string name="add_task">Add task</string>
+    <string name="add_new_task">Add new task</string>
 </resources>

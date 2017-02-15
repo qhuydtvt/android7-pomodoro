@@ -10,6 +10,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import techkids.vn.android7pomodoro.R;
 import techkids.vn.android7pomodoro.databases.models.Task;
+import techkids.vn.android7pomodoro.utils.Utils;
 
 /**
  * Created by huynq on 2/8/17.
@@ -31,8 +32,7 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
     public void bind(Task task) {
         //1: Bind Color
 //        vTaskColor.setBackgroundColor(Color.parseColor(task.getColor()));
-        GradientDrawable drawable = (GradientDrawable)vTaskColor.getBackground();
-        drawable.setColor(Color.parseColor(task.getColor()));
+        Utils.setSolidColor(vTaskColor, task.getColor());
 
         //2: Bind Task name
         tvTaskName.setText(task.getName());

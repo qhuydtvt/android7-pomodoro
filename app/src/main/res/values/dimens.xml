@@ -11,4 +11,7 @@
     <dimen name="button_margin_bottom">6dp</dimen>
     <dimen name="list_item_height">64dp</dimen>
     <dimen name="view_inter_space">16dp</dimen>
+    <dimen name="inter_space">4dp</dimen>
+    <dimen name="screen_edge">16dp</dimen>
+    <dimen name="task_color_size">48dp</dimen>
 </resources>

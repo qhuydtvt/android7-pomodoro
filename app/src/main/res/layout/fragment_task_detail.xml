@@ -2,12 +2,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingStart="@dimen/screen_edge"
+    android:paddingEnd="@dimen/screen_edge"
+    android:paddingTop="@dimen/screen_edge"
     tools:context="techkids.vn.android7pomodoro.fragments.TaskDetailFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Task detail" />
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/til_task_name"
+            android:layout_marginBottom="@dimen/inter_space">
+
+            <EditText
+                android:id="@+id/et_name"
+                android:hint="@string/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/til_task_payment"
+            android:layout_below="@id/til_task_name"
+            android:layout_marginBottom="@dimen/inter_space"
+            >
+
+            <EditText
+                android:id="@+id/et_payment"
+                android:hint="@string/payment_per_hour"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_below="@id/til_task_payment"
+            android:id="@+id/rv_task_color"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
 
 </FrameLayout>
