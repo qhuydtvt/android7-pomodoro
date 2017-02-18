@@ -23,6 +23,8 @@ import techkids.vn.android7pomodoro.R;
 import techkids.vn.android7pomodoro.activities.TaskActivity;
 import techkids.vn.android7pomodoro.adapters.TaskAdapter;
 import techkids.vn.android7pomodoro.databases.models.Task;
+import techkids.vn.android7pomodoro.fragments.strategies.AddTaskAction;
+import techkids.vn.android7pomodoro.fragments.strategies.EditTaskAction;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -70,9 +72,18 @@ public class TaskFragment extends Fragment {
 
                 taskDetailFragment.setTitle("Edit task");
                 taskDetailFragment.setTask(task);
+                taskDetailFragment.setTaskAction(new EditTaskAction());
 
                 //TODO: Make TaskActivity and Fragment independent
                 ((TaskActivity)getActivity()).replaceFragment(taskDetailFragment, true);
+            }
+        });
+
+        taskAdapter.setTaskTimerListener(new TaskAdapter.TaskTimerListener() {
+            @Override
+            public void onStart(Task task) {
+                Log.d(TAG, "onStart: starting timer");
+                ((TaskActivity)getActivity()).replaceFragment(new TimerFragment(), true);
             }
         });
 
@@ -91,6 +102,7 @@ public class TaskFragment extends Fragment {
     void onFabClick() {
         TaskDetailFragment taskDetailFragment = new TaskDetailFragment();
         taskDetailFragment.setTitle("Add new task");
+        taskDetailFragment.setTaskAction(new AddTaskAction());
 
         //TODO: Make TaskActivity and Fragment independent
         ((TaskActivity)getActivity()).replaceFragment(taskDetailFragment, true);

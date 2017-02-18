@@ -8,16 +8,19 @@ public class Task {
     private String name;
     private String color;
     private float paymentPerHour;
+    private boolean isDone;
 
     public Task(String name, String color) {
         this.name = name;
         this.color = color;
+        this.isDone = false;
     }
 
     public Task(String name, String color, float paymentPerHour) {
         this.name = name;
         this.color = color;
         this.paymentPerHour = paymentPerHour;
+        this.isDone = false;
     }
 
     public String getName() {
@@ -42,6 +45,18 @@ public class Task {
 
     public void setPaymentPerHour(float paymentPerHour) {
         this.paymentPerHour = paymentPerHour;
+    }
+
+    public boolean isDone() {
+        return isDone;
+    }
+
+    public void setDone(boolean done) {
+        isDone = done;
+    }
+
+    public void flipDone() {
+        isDone = !isDone;
     }
 
     @Override

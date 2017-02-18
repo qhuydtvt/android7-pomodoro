@@ -1,6 +1,7 @@
 package techkids.vn.android7pomodoro.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +17,25 @@ import techkids.vn.android7pomodoro.databases.models.Task;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> {
 
+    private static final String TAG = "TaskAdapter";
+
     public interface TaskItemClickListener {
         void onItemClick(Task task);
     }
 
+    public interface TaskTimerListener {
+        void onStart(Task task);
+    }
+
     private TaskItemClickListener taskItemClickListener;
+    private TaskTimerListener taskTimerListener;
 
     public void setTaskItemClickListener(TaskItemClickListener taskItemClickListener) {
         this.taskItemClickListener = taskItemClickListener;
+    }
+
+    public void setTaskTimerListener(TaskTimerListener taskTimerListener) {
+        this.taskTimerListener = taskTimerListener;
     }
 
     @Override
@@ -38,7 +50,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(TaskViewHolder holder, int position) {
+    public void onBindViewHolder(TaskViewHolder holder, final int position) {
         //1: Get data based on position
         final Task task = DbContext.instance.allTasks().get(position);
 
@@ -52,6 +64,27 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> {
                 if (taskItemClickListener != null) {
                     taskItemClickListener.onItemClick(task);
                 }
+            }
+        });
+
+        Log.d(TAG, "onBindViewHolder:");
+
+        holder.ibStartTimer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: ibStartTimer");
+                if(taskTimerListener != null) {
+                    taskTimerListener.onStart(task);
+                }
+            }
+        });
+
+        holder.vTaskColor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                task.flipDone();
+//                notifyDataSetChanged();
+                TaskAdapter.this.notifyItemChanged(position);
             }
         });
     }

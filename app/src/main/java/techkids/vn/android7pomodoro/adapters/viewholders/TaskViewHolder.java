@@ -4,6 +4,8 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -19,10 +21,16 @@ import techkids.vn.android7pomodoro.utils.Utils;
 public class TaskViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.v_task_color)
-    View vTaskColor;
+    public View vTaskColor;
 
     @BindView(R.id.tv_task_name)
-    TextView tvTaskName;
+    public TextView tvTaskName;
+
+    @BindView(R.id.ib_start_timer)
+    public ImageButton ibStartTimer;
+
+    @BindView(R.id.iv_check)
+    ImageView ivCheck;
 
     public TaskViewHolder(View itemView) {
         super(itemView);
@@ -36,5 +44,11 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
 
         //2: Bind Task name
         tvTaskName.setText(task.getName());
+
+        if(task.isDone()) {
+            ivCheck.setVisibility(View.VISIBLE);
+        } else {
+            ivCheck.setVisibility(View.INVISIBLE);
+        }
     }
 }

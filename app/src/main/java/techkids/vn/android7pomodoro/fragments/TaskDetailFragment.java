@@ -23,6 +23,8 @@ import techkids.vn.android7pomodoro.adapters.TaskColorAdapter;
 import techkids.vn.android7pomodoro.databases.DbContext;
 import techkids.vn.android7pomodoro.databases.models.Task;
 import techkids.vn.android7pomodoro.decorations.TaskColorDecor;
+import techkids.vn.android7pomodoro.fragments.strategies.EditTaskAction;
+import techkids.vn.android7pomodoro.fragments.strategies.TaskAction;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,6 +46,8 @@ public class TaskDetailFragment extends Fragment {
 
     private String title;
     private Task task;
+
+    private TaskAction taskAction;
 
     public TaskDetailFragment() {
         // Required empty public constructor
@@ -105,16 +109,24 @@ public class TaskDetailFragment extends Fragment {
             float paymentPerHour = Float.parseFloat(etPaymentPerHour.getText().toString());
             String color = taskColorAdapter.getSelectedColor();
 
+            if (task == null) {
+                // ADD
+                task = new Task(taskName, color, paymentPerHour);
+            } else {
+                // EDIT
+                task.setName(taskName);
+                task.setColor(color);
+                task.setPaymentPerHour(paymentPerHour);
+            }
 
-
-//            // 2: Create new TASK
-//            Task newTask = new Task(taskName, color, paymentPerHour);
-//
-//            // 3: Add to database
-//            DbContext.instance.addTask(newTask);
+            this.taskAction.excute(task);
 
             getActivity().onBackPressed();
         }
         return false;
+    }
+
+    public void setTaskAction(TaskAction taskAction) {
+        this.taskAction = taskAction;
     }
 }

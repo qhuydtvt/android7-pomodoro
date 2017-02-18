@@ -12,8 +12,20 @@
         android:layout_marginEnd="@dimen/view_inter_space"
         android:layout_width="24dp"
         android:layout_height="24dp" />
+
+    <ImageView
+        android:id="@+id/iv_check"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_check_white_24px"
+        android:layout_alignTop="@id/v_task_color"
+        android:layout_alignBottom="@id/v_task_color"
+        android:layout_alignStart="@id/v_task_color"
+        android:layout_alignEnd="@id/v_task_color"
+        />
     
     <ImageButton
+        android:id="@+id/ib_start_timer"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:background="@color/collorTransparent"
