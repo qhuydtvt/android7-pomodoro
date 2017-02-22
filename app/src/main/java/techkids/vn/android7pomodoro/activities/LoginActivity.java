@@ -25,6 +25,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import techkids.vn.android7pomodoro.R;
+import techkids.vn.android7pomodoro.networks.NetContext;
 import techkids.vn.android7pomodoro.networks.jsonmodels.LoginBodyJson;
 import techkids.vn.android7pomodoro.networks.jsonmodels.LoginResponseJson;
 import techkids.vn.android7pomodoro.networks.services.LoginService;
@@ -50,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        skipLoginIfPossible();
+//        skipLoginIfPossible();
 
         setContentView(R.layout.activity_login);
 
@@ -82,14 +83,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void sendLogin(String username, String password) {
-        //1 : Create retrofit (BaseURL)
-        retrofit = new Retrofit.Builder()
-                .baseUrl("http://a-task.herokuapp.com/api/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
         //2: Create service (Service)
-        LoginService loginService = retrofit.create(LoginService.class);
+        LoginService loginService = NetContext.instance.createLoginService();
 
         // data & format
         // format => MediaType
@@ -149,5 +145,4 @@ public class LoginActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
-
 }
