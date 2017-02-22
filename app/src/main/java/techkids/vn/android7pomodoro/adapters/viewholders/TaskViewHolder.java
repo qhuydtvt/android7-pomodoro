@@ -20,6 +20,7 @@ import techkids.vn.android7pomodoro.utils.Utils;
 
 public class TaskViewHolder extends RecyclerView.ViewHolder {
 
+    private static final String DEFAULT_COLOR = "#0000FF";
     @BindView(R.id.v_task_color)
     public View vTaskColor;
 
@@ -40,7 +41,11 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
     public void bind(Task task) {
         //1: Bind Color
 //        vTaskColor.setBackgroundColor(Color.parseColor(task.getColor()));
-        Utils.setSolidColor(vTaskColor, task.getColor());
+        if (task.getColor() != null) {
+            Utils.setSolidColor(vTaskColor, task.getColor());
+        }else {
+            Utils.setSolidColor(vTaskColor, DEFAULT_COLOR);
+        }
 
         //2: Bind Task name
         tvTaskName.setText(task.getName());

@@ -3,8 +3,6 @@ package techkids.vn.android7pomodoro.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,15 +14,24 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import techkids.vn.android7pomodoro.R;
 import techkids.vn.android7pomodoro.activities.TaskActivity;
 import techkids.vn.android7pomodoro.adapters.TaskAdapter;
+import techkids.vn.android7pomodoro.databases.DbContext;
 import techkids.vn.android7pomodoro.databases.models.Task;
 import techkids.vn.android7pomodoro.fragments.strategies.AddTaskAction;
 import techkids.vn.android7pomodoro.fragments.strategies.EditTaskAction;
+import techkids.vn.android7pomodoro.networks.NetContext;
+import techkids.vn.android7pomodoro.networks.jsonmodels.TaskJson;
+import techkids.vn.android7pomodoro.networks.services.TaskService;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,9 +54,39 @@ public class TaskFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_task, container, false);
+        View view = inflater.inflate(R.layout.fragment_task, container, false);
         setupUI(view);
+        downloadTasks();
         return view;
+    }
+
+    private void downloadTasks() {
+        NetContext.instance
+                .create(TaskService.class)
+                .getAllTasks()
+                .enqueue(new Callback<List<TaskJson>>() {
+                    @Override
+                    public void onResponse(Call<List<TaskJson>> call, Response<List<TaskJson>> response) {
+                        List<TaskJson> taskJsonList = response.body();
+                        if (taskJsonList != null) {
+                            DbContext.instance.clearAllTasks();
+                            for (TaskJson taskJson : taskJsonList) {
+                                Task newTask = new Task(
+                                        taskJson.getName(),
+                                        taskJson.getColor(),
+                                        (float) taskJson.getPaymentPerHour()
+                                );
+                                DbContext.instance.addTask(newTask);
+                                taskAdapter.notifyDataSetChanged();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<TaskJson>> call, Throwable t) {
+                        Log.d(TAG, "onFailure: ");
+                    }
+                });
     }
 
     @Override
@@ -75,7 +112,7 @@ public class TaskFragment extends Fragment {
                 taskDetailFragment.setTaskAction(new EditTaskAction());
 
                 //TODO: Make TaskActivity and Fragment independent
-                ((TaskActivity)getActivity()).replaceFragment(taskDetailFragment, true);
+                ((TaskActivity) getActivity()).replaceFragment(taskDetailFragment, true);
             }
         });
 
@@ -83,7 +120,7 @@ public class TaskFragment extends Fragment {
             @Override
             public void onStart(Task task) {
                 Log.d(TAG, "onStart: starting timer");
-                ((TaskActivity)getActivity()).replaceFragment(new TimerFragment(), true);
+                ((TaskActivity) getActivity()).replaceFragment(new TimerFragment(), true);
             }
         });
 
@@ -105,6 +142,6 @@ public class TaskFragment extends Fragment {
         taskDetailFragment.setTaskAction(new AddTaskAction());
 
         //TODO: Make TaskActivity and Fragment independent
-        ((TaskActivity)getActivity()).replaceFragment(taskDetailFragment, true);
+        ((TaskActivity) getActivity()).replaceFragment(taskDetailFragment, true);
     }
 }

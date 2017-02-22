@@ -17,6 +17,7 @@ import okio.BufferedSource;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import techkids.vn.android7pomodoro.networks.services.LoginService;
+import techkids.vn.android7pomodoro.settings.SharedPrefs;
 
 /**
  * Created by apple on 1/18/17.
@@ -32,6 +33,7 @@ public class NetContext {
 
         OkHttpClient client = new OkHttpClient
                 .Builder()
+                .addInterceptor(new HeaderInterceptor())
                 .addInterceptor(new LoggerInterceptor())
                 .build();
 
@@ -44,6 +46,10 @@ public class NetContext {
 
     public LoginService createLoginService() {
         return retrofit.create(LoginService.class);
+    }
+
+    public <T> T create(Class<T>  classz) {
+        return retrofit.create(classz);
     }
 
     class LoggerInterceptor implements Interceptor {
@@ -89,6 +95,25 @@ public class NetContext {
             }
             Buffer buffer = source.buffer();
             return buffer.clone().readString(Charset.forName("UTF-8"));
+        }
+    }
+
+    class HeaderInterceptor implements  Interceptor {
+
+        @Override
+        public Response intercept(Chain chain) throws IOException {
+
+            String token = SharedPrefs.getInstance().getAccessToken();
+
+            if (token != null) {
+                Request request = chain.request()
+                        .newBuilder()
+                        .addHeader("Authorization", String.format("JWT %s", token))
+                        .build();
+                return chain.proceed(request);
+            }
+
+            return chain.proceed(chain.request());
         }
     }
 }

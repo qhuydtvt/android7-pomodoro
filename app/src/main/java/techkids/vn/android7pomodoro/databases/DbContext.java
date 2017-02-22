@@ -37,6 +37,10 @@ public class DbContext {
         tasks.add(newTask);
     }
 
+    public void clearAllTasks() {
+        tasks.clear();
+    }
+
     public void edit(Task task) {
         //TODO: Edit task in database
     }
